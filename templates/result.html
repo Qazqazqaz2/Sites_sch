@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Онлайн магазин</title>
+{% endblock %}
+
+{% block body %}
+<div class="row" style="padding-top: 100px; padding-bottom: 30px;">        {% if count != 0 %}
+        {% for i in result %}
+                <div class="col-md-6 col-xl-3 mb-3 mb-md-4">
+                    <div class="card border border-info rounded-0">
+                        <div class="card-header">
+                            <h5 class="p text-center card-text">{{ i[0] }}</h5>
+                       </div>
+                        <div class="thumbnail">
+                                <div class="overlay">
+
+                            <div class="mdb-lightbox no-margin">
+                                <figure class="col-md-auto">
+                                    <a href="{{ url_for('static', filename=i[3]) }}" data-size="1600x1067">
+                                    <img class="card-img-top img-center center-block" src="{{ url_for('static', filename=i[3]) }}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen id="video">
+                                    </a>
+                            </figure>
+                        </div>
+                                </div>
+                        </div>
+                      <div class="modal-footer">
+                          <a href='/profile/{{ i[1] }}/'>
+                          <h5> Перейти к автору</h5>
+                          </a>
+                          <a href="{{ '/view/%s'%i[2]|urlencode }}">
+                          <h5> Перейти к услуге</h5>
+                          </a>
+                      </div>
+                        <div class="modal-footer">
+                          <a href="/view/{{i[2]}}/post/">
+                          <h5> Отзывы </h5>
+                          </a>
+                      </div>
+                    </div>
+                </div>
+    {% endfor %}
+    {% endif %}
+    {% if count == 0 %}
+        <h1 class="text-muted text-center">Not Found</h1>
+    {% endif %}
+    </div>
+{% endblock %}

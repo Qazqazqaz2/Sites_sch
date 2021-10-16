@@ -1,0 +1,445 @@
+<style>
+    body {
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #292b2c;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* свойства модального окна по умолчанию */
+    .mod {
+      position: fixed;
+      /* фиксированное положение */
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      /* цвет фона */
+      z-index: 1050;
+      opacity: 0;
+      /* по умолчанию модальное окно прозрачно */
+      -webkit-transition: opacity 400ms ease-in;
+      -moz-transition: opacity 400ms ease-in;
+      transition: opacity 400ms ease-in;
+      /* анимация перехода */
+      pointer-events: none;
+      /* элемент невидим для событий мыши */
+    }
+
+    /* при отображении модального окно */
+    .mod:target {
+      opacity: 1;
+      pointer-events: auto;
+      overflow-y: auto;
+    }
+
+    /* ширина модального окна и его отступы от экрана */
+    .mod-dialog {
+      position: relative;
+      width: auto;
+      margin: 10px;
+    }
+
+    @media (min-width: 576px) {
+      .mod-dialog {
+        max-width: 500px;
+        margin: 30px auto;
+      }
+    }
+
+    /* свойства для блока, содержащего контент модального окна */
+    .mod-content {
+      position: relative;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: .3rem;
+      outline: 0;
+    }
+
+    @media (min-width: 768px) {
+      .mod-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+      }
+    }
+
+    /* свойства для заголовка модального окна */
+    .mod-header {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #eceeef;
+    }
+
+    .mod-title {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 1.5;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    /* свойства для кнопки "Закрыть" */
+    .clos {
+      float: right;
+      font-family: sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .5;
+      text-decoration: none;
+    }
+
+    /* свойства для кнопки "Закрыть" при нахождении её в фокусе или наведении */
+    .clos:focus,
+    .clos:hover {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: .75;
+    }
+
+    /* свойства для блока, содержащего основное содержимое окна */
+    .mod-body {
+      position: relative;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 15px;
+      overflow: auto;
+    }
+  </style>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Добавление товара</title>
+{% endblock %}
+
+{% block body %}
+<script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBCfIZAAAAAO39_L4Gd7f6uCM0PfP_N3XjHxkW',
+          'theme' : 'dark'
+        });
+      };
+    </script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<style>
+.box__dragndrop,
+.box__uploading,
+.box__success,
+.box__error {
+  display: none;
+}
+  .dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #3e8e41;
+}
+
+#myInput {
+  box-sizing: border-box;
+  background-image: url('searchicon.png');
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+#myInput:focus {outline: 3px solid #ddd;}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+</style>
+<div class="container" style="padding-top: 160px; padding-bottom: 40px">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <form method="post" class="md-form" enctype=multipart/form-data>
+        <input type="text" class="form-control" name="title" id="title" placeholder="Введите название"><br>
+        <br>
+        <div>
+            <a href="#openwindhref" class="btn btn-primary">Посмотреть описание</a>
+            <a href="#openeditcolor" class="btn btn-info">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-light">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-dark">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-warning">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-danger">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-success">Посмотреть описание</a>
+            <a href="#openMod" class="btn btn-secondary">Посмотреть описание</a>
+        </div>
+
+           <div id="openwindhref" class="mod">
+               <div class="mod-dialog">
+                   <div class="mod-content">
+                       <div class="mod-header">
+                           <h3 class="mod-title">title</h3>
+                           <a href="#clos" title="Close" class="clos">×</a>
+                        </div>
+                        <div class="mod-body">
+                        <label for="basic-url">Your vanity URL</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+                            </div>
+                            <input type="text" class="form-control href_cr" id="basic-url" aria-describedby="basic-addon3">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">With textarea</span>
+                            </div>
+                            <textarea class="form-control title_href" aria-label="With textarea"></textarea>
+                        </div>
+                        <br>
+                        <a style="align: center;" class="btn btn-primary clos" href="#clos" onclick="makeHref();">Посмотреть описание</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
+           <div id="openeditcolor" class="mod">
+               <div class="mod-dialog">
+                   <div class="mod-content">
+                       <div class="mod-header">
+                           <h3 class="mod-title">title</h3>
+                           <a href="#clos" title="Close" class="clos">×</a>
+                        </div>
+                        <div class="mod-body">
+                        <label for="basic-url">Your vanity URL</label>
+                        <div class="input-group d-flex justify-content-center">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Color</span>
+                            </div>
+                            <input type="color" class="form-control form-control-color" id="exampleColorInput" style="min-width:150px;" value="#563d7c" title="Choose your color">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">With textarea</span>
+                            </div>
+                            <textarea class="form-control title_href tce" aria-label="With textarea"></textarea>
+                        </div>
+                        <br>
+                        <a style="align: center;" class="btn btn-primary clos" href="#clos" onclick="editcolor();">Посмотреть описание</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <br>
+        <textarea class="form-control text_main" name="text" id="text" placeholder="Message" style="height: 10rem;" data-sb-validations="required"></textarea>
+        <a style="float: right;" class="btn btn-secondary" onclick="reload_text();">Посмотреть описание</a>
+        <br>
+    <div class="container">
+    <p class="text-justify text_view">loaded</p>
+    </div>
+    <br>
+        <div class="container">
+    <div class="file-field">
+    <div class="d-flex justify-content-center">
+      <div class="btn btn-mdb-color btn-rounded float-center">
+        <p>Загрузить картинку на preview</p>
+        <input name="prew_img" type="file">
+      </div>
+    </div>
+  </div>
+    <div class="file-field">
+    <div class="d-flex justify-content-center">
+      <div class="btn btn-mdb-color btn-rounded float-center">
+        <p>Загрузить все картинки</p>
+        <input name="img[]" type="file"  id="file" data-multiple-caption="{count} files selected" multiple>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+<div id="html_element" name="captcha" class="captcha d-flex justify-content-center" inputmode=""></div>
+<br>
+<button type="submit" class="btn-lg btn-block btn-info">Info</button>
+
+    </form>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+<script>
+
+// Material Select Initialization
+$(document).ready(function() {
+$('.mdb-select').materialSelect();
+});
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+var previewNode = document.querySelector("#template");
+previewNode.id = "";
+var previewTemplate = previewNode.parentNode.innerHTML;
+previewNode.parentNode.removeChild(previewNode);
+
+var myDropzone = new Dropzone(".container", { // Make the whole body a dropzone
+  url: "/upload", // Set the url
+  thumbnailWidth: 80,
+  thumbnailHeight: 80,
+  parallelUploads: 20,
+  previewTemplate: previewTemplate,
+  autoQueue: false, // Make sure the files aren't queued until manually added
+  previewsContainer: "#previews", // Define the container to display the previews
+  clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+});
+
+myDropzone.on("addedfile", function(file) {
+  // Hookup the start button
+  file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+});
+
+// Update the total progress bar
+myDropzone.on("totaluploadprogress", function(progress) {
+  document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+});
+
+myDropzone.on("sending", function(file) {
+  // Show the total progress bar when upload starts
+  document.querySelector("#total-progress").style.opacity = "1";
+  // And disable the start button
+  file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+});
+
+// Hide the total progress bar when nothing's uploading anymore
+myDropzone.on("queuecomplete", function(progress) {
+  document.querySelector("#total-progress").style.opacity = "0";
+});
+
+// Setup the buttons for all transfers
+// The "add files" button doesn't need to be setup because the config
+// `clickable` has already been specified.
+document.querySelector("#actions .start").onclick = function() {
+  myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+};
+document.querySelector("#actions .cancel").onclick = function() {
+  myDropzone.removeAllFiles(true);
+};
+</script>
+
+
+<script>
+
+function strong() {
+    var t_main = $(".text_main");
+    var text_view = $('.text_view');
+    
+};
+
+function editcolor() {
+    var t_main = $(".text_main");
+    var text_view = $('.text_view');
+    var color_edit = $('.form-control-color').val();
+    var tce = $('.tce').val();
+    console.log(tce);
+    console.log(color_edit);
+    console.log();
+    t_main.val(t_main.val() + $($.parseHTML('<p style="color: '+ color_edit +'"> '+ tce +' </p>')).text());
+    text_view.append('<mark style="color: '+ color_edit +'">'+ tce +'</mark>');
+};
+
+function makeHref() {
+    //var text_main = $(".text_main");
+    //text_main.val(text_main.val()+'<a href="'+ '#href' +'">'+ 'xxxxx' +'</a>');
+    var t_main = $(".text_main");
+    var text_view = $('.text_view');
+    var title_href = $('.title_href').val();
+    var href = $('.href_cr').val();
+    t_main.val(t_main.val() + $($.parseHTML('<a href="'+ href +'"> '+ title_href +' </a>')).text());
+    text_view.append('<a href="'+ href +'">'+ title_href +'</a>');
+};
+
+function reload_text() {
+    var text_main = $(".text_main").val();
+    var text_view = $('.text_view');
+    console.log(text_view.text());
+    console.log(text_main);
+    console.log(String(text_main));
+    console.log(text_main.includes(text_view.text()));
+    if (text_main.includes(text_view.text())) {
+        text_view.append(String(text_main).replace(String(text_view.text()), ''));
+    }
+    else{
+        console.log('False');
+    }
+};
+</script>
+{% endblock %}

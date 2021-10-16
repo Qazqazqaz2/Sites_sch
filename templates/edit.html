@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Edit</title>
+{% endblock %}
+
+{% block body %}
+<div class="container" style="padding-top:100px">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="post" enctype=multipart/form-data>
+        <input type="text" class="form-control" name="name_ed" id="name_ed" placeholder="{{main.name}}"><br>
+        <input type="text" class="form-control" name="main_num_ed" id="main_num_ed" placeholder="{{main.main_num}}"><br>
+        <input type="text" class="form-control" name="email_ed" id="email_ed" placeholder="{{main.email}}"><br>
+        <br>
+        <br>
+        <p class="text-center"><input type="checkbox" name="delite" value="True">Я хочу удалить аккаунт</p>
+        <br>
+        <div id="html_element" name="captcha" class="captcha d-flex justify-content-center" inputmode=""></div>
+        <br>
+        <button type="submit" class="button is-block bg-info is-large is-fullwidth">Edit</button>
+  </form>
+
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBCfIZAAAAAO39_L4Gd7f6uCM0PfP_N3XjHxkW',
+          'theme' : 'dark'
+        });
+      };
+    </script>
+
+
+    {% endblock %}

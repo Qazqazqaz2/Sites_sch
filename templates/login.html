@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block body %}
+<script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBCfIZAAAAAO39_L4Gd7f6uCM0PfP_N3XjHxkW',
+          'theme' : 'dark'
+        });
+      };
+    </script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<div class="column is-4 is-offset-4" style="padding-top: 100px">
+    <h3 class="title text-info text-center">Login</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                </div>
+            </div>
+            <div class="field">
+                <label class="checkbox d-flex justify-content-center">
+                    <input type="checkbox">
+                    Remember me
+                </label>
+            </div>
+            <div id="html_element" name="captcha" class="captcha d-flex justify-content-center" inputmode=""></div>
+            <br>
+            <button type="submit" class="button is-block bg-info is-large is-fullwidth">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

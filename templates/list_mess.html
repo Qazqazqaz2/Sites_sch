@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Добавление товара</title>
+{% endblock %}
+
+{% block body %}
+<div class="container" style="padding-top:100px">
+    <div class="list-group">
+{% if current_user.is_authenticated %}
+{% for i in list %}
+    {% if i.us_1==current_user.name %}
+        <li style="list-style-type: none;"><a class="list-group-item list-group-item-action list-group-item-info" href="/chat/{{i.id}}/#mess"><h1>{{i.us_2}}</h1></a></li>
+        <br>
+        {% endif %}
+    {% if i.us_2==current_user.name %}
+        <li style="list-style-type: none;"><a class="list-group-item list-group-item-action list-group-item-info" href="/chat/{{i.id}}/#mess"><h1>{{i.us_1}}</h1></a></li>
+        <br>
+        {% endif %}
+{% endfor %}
+{% endif %}
+    </div>
+</div>
+{% endblock %}

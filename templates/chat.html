@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Добавление товара</title>
+{% endblock %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+{% if current_user.name==ch_h.us_1 or current_user.name==ch_h.us_2 %}
+<div class="container" style="padding-top: 190px; padding-bottom:200px;">
+{% if ch_h.mess==None: %}
+ <h1>Not comments</h1>
+{% endif %}
+      <ul class="list-group list-group-flush">
+{% if ch_h!=None: %}
+    {% for l in range(col) %}
+    {% if ch_h.name[l]==current_user.name %}
+          <li class="list-group-item bg-info text-white">
+              <h4>{{ch_h.name[l]}}</h4>
+              <h6>{{ch_h.mess[l]}}</h6>
+              <h8 class="text-white-muted">{{ch_h.pub_date[l]}}</h8>
+          </li>
+    {% endif %}
+    {% if ch_h.name[l]!=current_user.name %}
+          <li class="list-group-item bg-white text-right">
+              <h4>{{ch_h.name[l]}}</h4>
+              <h7>{{ch_h.mess[l]}}</h7>
+              <h9 class="text-muted">{{ch_h.pub_date[l]}}</h9>
+          </li>
+    {% endif %}
+    {% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+  </ul>
+        <h3>Написание сообщения</h3>
+    <form method="post" enctype=multipart/form-data>
+        <input type="text" class="form-control" name="mess" id="mess" placeholder="Введите сообщение">
+    </form>
+
+</div>
+{% endblock %}

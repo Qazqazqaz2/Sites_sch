@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>VIEW</title>
+{% endblock %}
+
+{% block body %}
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<style>
+    body {
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #292b2c;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* свойства модального окна по умолчанию */
+    .mod {
+      position: fixed;
+      /* фиксированное положение */
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      /* цвет фона */
+      z-index: 1050;
+      opacity: 0;
+      /* по умолчанию модальное окно прозрачно */
+      -webkit-transition: opacity 400ms ease-in;
+      -moz-transition: opacity 400ms ease-in;
+      transition: opacity 400ms ease-in;
+      /* анимация перехода */
+      pointer-events: none;
+      /* элемент невидим для событий мыши */
+    }
+
+    /* при отображении модального окно */
+    .mod:target {
+      opacity: 1;
+      pointer-events: auto;
+      overflow-y: auto;
+    }
+
+    /* ширина модального окна и его отступы от экрана */
+    .mod-dialog {
+      position: relative;
+      width: auto;
+      margin: 10px;
+    }
+
+    @media (min-width: 576px) {
+      .mod-dialog {
+        max-width: 500px;
+        margin: 30px auto;
+      }
+    }
+
+    /* свойства для блока, содержащего контент модального окна */
+    .mod-content {
+      position: relative;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: .3rem;
+      outline: 0;
+    }
+
+    @media (min-width: 768px) {
+      .mod-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+      }
+    }
+
+    /* свойства для заголовка модального окна */
+    .mod-header {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #eceeef;
+    }
+
+    .mod-title {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 1.5;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    /* свойства для кнопки "Закрыть" */
+    .clos {
+      float: right;
+      font-family: sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .5;
+      text-decoration: none;
+    }
+
+    /* свойства для кнопки "Закрыть" при нахождении её в фокусе или наведении */
+    .clos:focus,
+    .clos:hover {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: .75;
+    }
+
+    /* свойства для блока, содержащего основное содержимое окна */
+    .mod-body {
+      position: relative;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 15px;
+      overflow: auto;
+    }
+  </style>
+<div class="container" style="padding-top: 100px">
+    <h1 style="text-align: center; margin-top: 20px; margin-bottom: 20px;">{{ dt.title }}</h1>
+    <div class="cont" tabindex="-1">
+    <div style="text-align: center;">
+      <a href="#openMod">Посмотреть описание</a>
+    </div>
+    <div id="openMod" class="mod">
+      <div class="mod-dialog">
+        <div class="mod-content">
+          <div class="mod-header">
+            <h3 class="mod-title">{{ dt.title }}</h3>
+            <a href="#clos" title="Close" class="clos">×</a>
+          </div>
+          <div class="mod-body">
+            {{ dt.text }}
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li style="border: solid;" data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+       {% for im in range(1, dt_len) %}
+    <li style="border: solid;" data-target="#carouselExampleIndicators" data-slide-to="{{im}}"></li>
+      {% endfor %}
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+            <img style="max-height:500px" class="d-block w-100" src="{{ url_for('static', filename=dt.prew_img) }}" alt="First slide">
+    </div>
+       {% for im in dt.img %}
+       <div class="carousel-item">
+              <img class="d-block w-100" src="{{ url_for('static', filename=im) }}" alt="Third slide">
+       </div>
+      {% endfor %}
+  </div>
+</div>
+<br>
+        <div class="d-flex justify-content-end">
+                                <div class="col-md-5">
+                        {% if current_user.is_authenticated and current_user.id==dt.creator_id %}
+                            <a href="/edit_item/{{dt.id}}" class="btn btn-info is-fullwidth btn-lg" role="button" aria-pressed="true">
+                                Редактировать услугу
+                            </a>
+                                {%elif not current_user.is_authenticated%}
+                                <a href="/send_service/{{ dt.id }}" class="btn is-fullwidth btn-info btn-lg" role="button" aria-pressed="true">
+                                Заказать {{dt.price}} руб
+                                </a>
+                                {%else%}
+                                <form method="post" style="padding-bottom:40px" class="justify-content-center" enctype=multipart/form-data>
+                                    <textarea type="text" class="form-control" name="comment" placeholder="Комментарий к заказу"></textarea>
+                                    <br>
+                                    <div id="html_element" name="captcha" class="captcha d-flex justify-content-center" inputmode=""></div>
+                                    <br>
+                                    <button type="submit" class="btn is-fullwidth btn-info btn-lg" role="button" aria-pressed="true">
+                                    Заказать {{dt.price}} руб
+                                    </button>
+                                </form>
+                                {%endif%}
+                    </div>
+        </div>
+
+<script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBCfIZAAAAAO39_L4Gd7f6uCM0PfP_N3XjHxkW',
+          'theme' : 'dark'
+        });
+      };
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
+      console.log(scrollbar);
+      document.querySelector('[href="#openMod"]').addEventListener('click', function () {
+        document.body.style.overflow = 'hidden';
+        document.querySelector('#openMod').style.marginLeft = scrollbar;
+      });
+      document.querySelector('[href="#clos"]').addEventListener('click', function () {
+        document.body.style.overflow = 'visible';
+        document.querySelector('#openMod').style.marginLeft = '0px';
+      });
+    });
+    $(function () {
+    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+    });
+  </script>
+<!-- Modal -->
+
+{% endblock %}

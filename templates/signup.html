@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block body %}
+<script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBCfIZAAAAAO39_L4Gd7f6uCM0PfP_N3XjHxkW',
+          'theme' : 'dark'
+        });
+      };
+    </script>
+<div class="column is-4 is-offset-4" style="padding-top: 100px">
+    <h3 class="title text-info text-center">Sign Up</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }} Go to <a href="{{ url_for('login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form class="justify-content-center" action="/signup" method="POST" enctype=multipart/form-data>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="tel" name="main_num" placeholder="Number: 79831111111" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="name" placeholder="Name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Password">
+                </div>
+            </div>
+            <input type="file" class="input" name="prew_img" id="prew_img" multiple="">
+                <br>
+            <div id="html_element" name="captcha" class="captcha d-flex justify-content-center" inputmode=""></div>
+            <br>
+            <button type="submit" class="button is-block bg-info is-large is-fullwidth">Sign Up</button>
+        </form>
+    </div>
+</div>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+</script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
